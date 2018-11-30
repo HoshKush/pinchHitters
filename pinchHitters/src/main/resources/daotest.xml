@@ -14,7 +14,7 @@
 		class="org.apache.commons.dbcp.BasicDataSource"
 		p:driverClassName="oracle.jdbc.driver.OracleDriver"
 		p:url="jdbc:oracle:thin:@localhost:1521:XE" p:username="soldesk"
-		p:password="1111" />
+		p:password="1234" />
 		
 	<!-- MyBatis SQL 실행 클래스 -->
 	<bean id="sqlSessionFactory"
@@ -32,11 +32,13 @@
 			ref="sqlSessionFactory" />
 	</bean>
 
-	<bean id="dao" class="spring.model.member.MemberDAO" 
+	<bean id="declaration" class="spring.model.declaration.DeclarationDAO" 
 		p:mybatis-ref="sqlSession" />
-	<bean id="rdao" class="spring.model.board.BreplyDAO" 
+		
+	<bean id="notice" class="spring.model.notice.NoticeDAO" 
 		p:mybatis-ref="sqlSession" />
-	<bean id="reply" class="spring.model.bbs.ReplyDAO" 
+		
+	<bean id="comment" class="spring.model.n_comment.N_commentDAO" 
 		p:mybatis-ref="sqlSession" />
 
 </beans>

@@ -13,40 +13,51 @@ public class DeclarationDAO implements IDeclarationDAO {
 	@Autowired
 	private SqlSessionTemplate mybatis;
 	
+	public void setMybatis(SqlSessionTemplate mybatis) {
+		this.mybatis = mybatis;
+	}
+	
 	@Override
 	public boolean create(Object dto) throws Exception {
-		// TODO Auto-generated method stub
-		return false;
+		boolean flag = false;
+		int cnt = mybatis.insert("declaration.create",dto);
+		if(cnt>0) flag = true;
+		return flag;
 	}
 
 	@Override
 	public List list(Map map) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return mybatis.selectList("declaration.list",map);
 	}
 
 	@Override
-	public Object read(Object pk) throws Exception {
+	public DeclarationDTO read(Object d_num) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return mybatis.selectOne("declaration.read",d_num);
 	}
 
 	@Override
 	public boolean update(Object dto) throws Exception {
-		// TODO Auto-generated method stub
-		return false;
+		boolean flag = false;
+		int cnt = mybatis.update("declaration.update",dto);
+		if(cnt>0) flag = true;
+	return flag;	
 	}
 
 	@Override
-	public boolean delete(Object pk) throws Exception {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean delete(Object d_num) throws Exception {
+		boolean flag = false;
+		int cnt = mybatis.delete("declaration.delete",d_num);
+		if(cnt>0) flag=true;
+		
+	return flag;
 	}
 
 	@Override
 	public int total(Map map) throws Exception {
 		// TODO Auto-generated method stub
-		return 0;
+		return mybatis.selectOne("declaration.total",map);
 	}
 
 }

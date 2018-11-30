@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="n_comment">
+<!-- 	<insert id="create" parameterType="N_CommentDTO"> -->
+<!-- 		<selectKey keyProperty="nc_num" resultType="int" order="BEFORE"> -->
+<!-- 			select nvl(max(nc_num),0)+1 from N_Comment -->
+<!-- 		</selectKey> -->
+<!-- 		insert into N_Comment(nc_num, nc_content, nc_writer, nc_date,  n_num) -->
+<!-- 		values(#{nc_num}, #{nc_content}, #{nc_writer}, sysdate,  #{n_num}) -->
+<!-- 	</insert> -->
+
+<!-- 	<select id="read" parameterType="int" resultType="N_CommentDTO"> -->
+<!-- 		select * from -->
+<!-- 		N_Comment -->
+<!-- 		where nc_num = #{nc_num} -->
+<!-- 	</select> -->
+
+<!-- 	<update id="update" parameterType="N_CommentDTO"> -->
+<!-- 		update N_Comment -->
+<!-- 		set nc_content = #{nc_content} -->
+<!-- 		where nc_num = #{nc_num} -->
+<!-- 	</update> -->
+
+<!-- 	<delete id="delete" parameterType="int"> -->
+<!-- 		delete from N_Comment -->
+<!-- 		where nc_num = -->
+<!-- 		#{nc_num} -->
+<!-- 	</delete> -->
+
+<!-- 	<delete id="bdelete" parameterType="int"> -->
+<!-- 		delete from N_Comment -->
+<!-- 		where -->
+<!-- 		nc_num = #{nc_num} -->
+<!-- 	</delete> -->
+
+<!-- 	<select id="list" parameterType="Map" resultType="N_CommentDTO"> -->
+<!-- 		select nc_num, nc_content, nc_writer, nc_date,  n_num, r -->
+<!-- 			FROM( -->
+<!-- 			select nc_num, nc_content, nc_writer, nc_date, n_num, rownum r -->
+<!-- 				FROM( -->
+<!-- 				select nc_num, nc_content, nc_writer, n_num, to_char(nc_date, 'yyyy-mm-dd') as nc_date -->
+<!-- 				from N_Comment -->
+				
+<!-- 				order by nc_num DESC -->
+<!-- 				) -->
+<!-- 				<![CDATA[ -->
+<!-- 		)WHERE r >= #{sno} and r <= #{eno} -->
+<!-- 		]]> -->
+<!-- 	</select> -->
+
+<!-- 	<select id="total" parameterType="int" resultType="int"> -->
+<!-- 		select count(*) from N_Comment  -->
+<!-- 			where n_num = #{n_num} -->
+<!-- 	</select> -->
+</mapper>
