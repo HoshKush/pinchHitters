@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="c_rate">
+    
+	<insert id="create" parameterType="C_RateDTO">
+		insert into c_rate(cr_num, u_ID, cr_content, cr_star, cr_ratecode, c_ID)
+		values(#{cr_num}, #{u_ID}, #{cr_content}, #{cr_star}, #{cr_ratecode}, #{c_ID})
+	</insert>
+	
+	<select id="read" parameterType="String" resultType="C_RateDTO">
+		select cr_num, u_ID, cr_content, cr_star, cr_ratecode, c_ID
+		from c_rate
+		where u_ID = #{u_ID} or c_ID = #{c_ID}
+	</select>
+	
+	<update id="update" parameterType="String">
+		update c_rate
+		set cr_content = #{cr_content}, cr_star = #{cr_star}, cr_ratecode = #{cr_ratecode}
+		where u_ID = #{u_ID} or c_ID = #{c_ID}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		delete from c_rate
+		where cr_num = #{cr_num}
+	</delete>
+	
+	<select id="list" parameterType="Map" resultType="C_RateDTO">
+		select cr_num, u_ID, cr_content, cr_star, cr_ratecode, c_ID, r
+		from(
+			select cr_num, u_ID, cr_content, cr_star, cr_ratecode, c_ID, rownum as r
+			from c_rate
+			<where>
+				<choose>
+					<when test="col=='u_ID'">
+						u_ID like '%'||#{word}||'%'
+					</when>
+					<when test="col=='c_ID'">
+						c_ID like '%'||#{word}||'%'
+					</when>
+					<when test="col=='cr_star'">
+						cr_star like '%'||#{word}||'%'
+					</when>
+				</choose>
+			</where>
+		<![CDATA[
+		)where r>=#{sno} and r<=#{eno}
+		]]>
+	</select>
+    
+    <select id="total" parameterType="Map" resultType="int">
+		select count(*) from c_rate
+		<where>
+			<choose>
+				<when test="col=='u_ID'">
+					u_ID like '%'||#{word}||'%'
+				</when>
+				<when test="col=='c_ID'">
+					c_ID like '%'||#{word}||'%'
+				</when>
+				<when test="col=='cr_star'">
+					cr_star like '%'||#{word}||'%'
+				</when>
+			</choose>
+		</where>
+	</select>
+	
+</mapper>

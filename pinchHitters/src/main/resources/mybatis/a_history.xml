@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="history">
+    
+	<insert id="create" parameterType="A_HistoryDTO">
+		insert into a_history(ah_num, ah_name, ah_time, ah_endtime, ah_date, ah_salary, u_ID, c_ID)
+		values(#{ah_num}, #{ah_name}, #{ah_time}, #{ah_endtime}, #{ah_date}, #{ah_salary}, #{u_ID}, #{c_ID})
+	</insert>
+	
+	<select id="read" parameterType="String" resultType="A_HistoryDTO">
+		select ah_num, ah_name, ah_time, ah_endtime, ah_date, ah_salary, u_ID, c_ID from a_history
+		where u_ID = #{u_ID} or c_ID = #{c_ID}
+	</select>
+	
+	<update id="update" parameterType="String">
+		update a_history
+		set ah_name = '땜빵자1', ah_time = 6, ah_endtime = 12, ah_salary = 7500, 
+		    u_ID = #{u_ID}, c_ID = #{c_ID}
+		where ah_num = #{ah_num}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		delete from a_history
+		where ah_num = #{ah_num};
+	</delete>
+	
+	<select id="list" parameterType="Map" resultType="A_HistoryDTO">
+		select ah_num, ah_name, ah_date, ah_time, ah_endtime, ah_salary, u_ID, c_ID, r
+		from(
+			select ah_num, ah_name, ah_date, ah_time, ah_endtime, ah_salary, u_ID, c_ID, rownum as r
+			from a_history
+			<where>
+				<choose>
+					<when test="col=='ah_name'">
+						ah_name like '%'||#{word}||'%'
+					</when>
+					<when test="col=='u_ID'">
+						u_ID like '%'||#{word}||'%'
+					</when>
+					<when test="col=='c_ID'">
+						c_ID like '%'||#{word}||'%'
+					</when>
+				</choose>
+			</where>
+		<![CDATA[
+		)where r>=#{sno} and r<=#{eno}
+		]]>
+	</select>
+    
+    <select id="total" parameterType="Map" resultType="int">
+		select count(*) from a_history
+		<where>
+			<choose>
+				<when test="col=='ah_name'">
+					ah_name like '%'||#{word}||'%'
+				</when>
+				<when test="col=='u_ID'">
+					u_ID like '%'||#{word}||'%'
+				</when>
+				<when test="col=='c_ID'">
+					c_ID like '%'||#{word}||'%'
+				</when>
+			</choose>
+		</where>
+	</select>
+</mapper>
+

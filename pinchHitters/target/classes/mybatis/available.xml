@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="available">
+    
+	<insert id="create" parameterType="AvailableDTO">
+		insert into a_request(u_ID, av_job, av_udate, av_time, av_endtime, av_sdate, av_edate, av_detail, av_adate, av_flag)
+		values(#{u_ID}, #{av_job}, #{av_udate}, #{av_time}, 
+		    #{av_endtime}, #{av_sdate}, #{av_edate}, #{av_detail}, #{av_adate}, #{av_flag})
+	</insert>
+	
+	<select id="read" parameterType="String" resultType="AvailableDTO">
+		select u_ID, c_ID, ar_name, ar_job, ar_salary, ar_date, ar_time, ar_endtime, ar_bonus
+		from a_request
+		where u_ID = #{u_ID} or c_ID = #{c_ID}
+	</select>
+	
+	<update id="update" parameterType="String">
+		update a_request
+		set ar_job = 'A02', ar_salary = 70000, ar_time = 14, ar_endtime = 19, ar_bonus = '3'
+		where u_ID = #{u_ID} or c_ID = #{c_ID}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		delete from a_request
+		where ar_num = #{ar_num}
+	</delete>
+	
+	<select id="list" parameterType="Map" resultType="AvailableDTO">
+		select u_ID, c_ID, ar_name, ar_job, ar_salary, ar_date, ar_time, ar_endtime, ar_bonus, r
+		from(
+			select u_ID, c_ID, ar_name, ar_job, ar_salary, ar_date, ar_time, ar_endtime, ar_bonus, rownum as r
+			from a_request
+			<where>
+				<choose>
+					<when test="col=='ar_job'">
+						ar_job like '%'||#{word}||'%'
+					</when>
+					<when test="col=='ar_time'">
+						ar_time like '%'||#{word}||'%'
+					</when>
+					<when test="col=='ar_endtime'">
+						ar_endtime like '%'||#{word}||'%'
+					</when>
+				</choose>
+			</where>
+		<![CDATA[
+		)where r>=#{sno} and r<=#{eno}
+		]]>
+	</select>
+    
+    <select id="total" parameterType="Map" resultType="int">
+		select count(*) from a_request
+		<where>
+			<choose>
+				<when test="col=='ar_job'">
+					ar_job like '%'||#{word}||'%'
+				</when>
+				<when test="col=='ar_time'">
+					ar_time like '%'||#{word}||'%'
+				</when>
+				<when test="col=='ar_endtime'">
+					ar_endtime like '%'||#{word}||'%'
+				</when>
+			</choose>
+		</where>
+	</select>
+	
+</mapper>

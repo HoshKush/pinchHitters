@@ -1,9 +1,9 @@
-package spring.model.a_request;
+package spring.model.available;
 
 import java.util.List;
 import java.util.Map;
 
-public class A_RequestDAO implements IA_RequestDAO{
+public class AvailableDAO implements IAvailableDAO{
 
 	@Override
 	public boolean create(Object dto) throws Exception {
