@@ -11,7 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<select id="read" parameterType="String" resultType="UsersDTO">
-		select u_ID, name, age, sex, phone, address, address2, zipcode, email
+		select u_ID, name, age, sex, phone, address, address2, zipcode, email, fname
 		from users 
 		where u_ID = #{u_ID}
 	</select>
@@ -19,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="update" parameterType="String">
 		update users
 		set age = #{age}, phone = #{phone}, address = #{address}, address2 = #{address2}, 
-			zipcode = #{zipcode}, email = #{email}
+			zipcode = #{zipcode}, email = #{email}, fname = #{fname}
 		where u_ID = #{u_ID}
 	</update>
 	
