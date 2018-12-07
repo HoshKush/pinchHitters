@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="announce">
+<resultMap type="announceDTO" id="resultComp">
+    	<result property="a.c_id" column="c_id"/>
+    	<result property="a.an_job" column="an_job"/>
+    	<result property="a.an_udate" column="an_udate"/>
+    	<result property="a.an_time" column="an_time"/>
+    	<result property="a.an_endtime" column="an_endtime"/>
+    	<result property="a.an_sdate" column="an_sdate"/>
+    	<result property="a.an_edate" column="an_edate"/>
+    	<result property="a.an_salary" column="an_salary"/>
+    	<result property="a.an_flag" column="an_flag"/>
+    	<result property="cr.cr_rate" column="cr_rate"/>
+    	<result property="cr.cr_ratecode" column="cr_ratecode"/>
+    	<result property="c.c_cname" column="c_cname"/>
+    	<result property="c.c_address" column="c_address"/>
+   </resultMap>
+<insert id="create" parameterType="announceDTO">
+	insert into announce (
+	an_num, an_job, an_udate, an_time, an_endtime, an_sdate, an_edate, an_detail, an_salary, an_flag, c_ID)
+	values ((select nvl(max(an_num), 0)+1 as an_num from announce), #{an_job}, sysdate, #{an_time}, #{an_endtime},
+ 	#{an_sdate}, #{an_edate}, #{an_detail}, #{an_salary}, #{an_flag}, #{c_ID})
+</insert>
+<select id="read" parameterType="int" resultType="announceDTO">
+	select an_num, an_job, an_udate, an_time, an_endtime, an_sdate, an_edate, an_detail, an_salary, an_flag, c_ID from announce
+	where an_num = #{an_num}
+</select>
+<update id="update" parameterType="announceDTO">
+	update announce set
+		an_job = #{an_job},
+    	an_time = #{an_time},
+    	an_endtime = #{an_endtime},
+    	an_sdate = #{an_sdate},
+    	an_edate = #{an_edate},
+    	an_detail = #{an_detail},
+    	an_salary = #{an_salary},
+    	an_flag = #{an_flag}
+ 	where an_num = #{an_num} 
+</update>
+<delete id="delete" parameterType="int">
+	delete from announce
+	where an_num = #{an_num}
+</delete>
+<select id="total" parameterType="Map" resultType="int">
+	select count(*) from c_rate cr, announce a, company c
+	<where>
+	a.c_ID = #{c_ID} and a.c_ID = cr.c_ID = c.c_ID and a.an_flag="Y"
+		<choose>
+			<when test="job!=''">
+			and a.an_job = #{an_job}
+			</when>
+			<when test="stime!='' and etime==''">
+			<![CDATA[and a.an_time >= #{an_time}]]>
+			</when>
+			<when test="etime!=''">
+			<![CDATA[and (a.an_time >= #{an_time} and a.an_endtime <= #{an_endtime})]]>
+			</when>
+			<when test="sdate!='' and edate==''">
+			<![CDATA[and a.an_sdate >= #{an_sdate}]]>
+			</when> 
+			<when test="edate!=''">
+			<![CDATA[and (a.an_sdate >= #{an_sdate} and a.an_edate <= #{an_edate})]]>
+			</when>
+			<when test="salary!=''">
+			<![CDATA[and a.an_salary >= #{an_salary}]]>
+			</when>
+			<when test="address!=''">
+			and (c.address = #{address} or c.address2 = #{address})
+			</when>
+			<when test="detail!=''">
+			and a.an_detail like '%'||#{detail}||'%'
+			</when>
+		</choose>
+		ORDER BY cr.cr_star DESC)
+		<![CDATA[)where r>=#{sno} and r<=#{eno}]]>
+	</where>
+</select> 
+<select id="list" parameterType="Map" resultMap="resultComp">
+	select a.an_job, a.an_udate, a.an_time, a.an_endtime, a.an_sdate, a.an_edate, a.an_salary, a.an_flag, cr.cr_rate, cr.cr_ratecode, c.cname, c.address, a.c_id, r
+	from(a.an_job, a.an_udate, a.an_time, a.an_endtime, a.an_sdate, a.an_edate, a.an_salary, a.an_flag, cr.cr_rate, cr.cr_ratecode, c.cname, c.address, a.c_id, rownum r
+	from(a.an_job, a.an_udate, a.an_time, a.an_endtime, a.an_sdate, a.an_edate, a.an_salary, a.an_flag, cr.cr_rate, cr.cr_ratecode, c.cname, c.address, a.c_id
+	from c_rate cr, announce a, company c
+	<where>
+	a.c_ID = #{c_ID} and a.c_ID = cr.c_ID = c.c_ID and a.an_flag="Y"
+		<choose>
+			<when test="job!=''">
+			and a.an_job = #{an_job}
+			</when>
+			<when test="stime!='' and etime==''">
+			<![CDATA[and a.an_time >= #{an_time}]]>
+			</when>
+			<when test="etime!=''">
+			<![CDATA[and (a.an_time >= #{an_time} and a.an_endtime <= #{an_endtime})]]>
+			</when>
+			<when test="sdate!='' and edate==''">
+			<![CDATA[and a.an_sdate >= #{an_sdate}]]>
+			</when> 
+			<when test="edate!=''">
+			<![CDATA[and (a.an_sdate >= #{an_sdate} and a.an_edate <= #{an_edate})]]>
+			</when>
+			<when test="salary!=''">
+			<![CDATA[and a.an_salary >= #{an_salary}]]>
+			</when>
+			<when test="address!=''">
+			and (c.address = #{address} or c.address2 = #{address})
+			</when>
+			<when test="detail!=''">
+			and a.an_detail like '%'||#{detail}||'%'
+			</when>
+		</choose>
+		ORDER BY cr.cr_star DESC)
+		<![CDATA[)where r>=#{sno} and r<=#{eno}]]>
+	</where>
+</select>
+
+ 
+</mapper>
